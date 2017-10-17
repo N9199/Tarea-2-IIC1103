@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -*-
 import math
 import os.path
+import tkinter.simpledialog as tk
 from tkinter.filedialog import askopenfilename
+ 
 class Game:
 
-    def __init__(self, file):
+    def __init__(self, file, players):
         if file is not None:
             self.load(file)
             return
         self.tablero = []
         self.marcado = 25*[-1]
         self.turno = 0
+        self.players = players
         for i in range(25):
             if i < 11:
                 self.marcado[i]=0
@@ -52,7 +55,7 @@ class Game:
         if self.marcado[x1+5*y1]!=self.turno%2:
             return [False, "Por favor elegir ficha valida"]
         if x1==x2 and y1==y2:
-            return [False, "Por favor mover a una posicion distinta a la original"]
+            return [False, "Por favor mover a una posición distinta a la original"]
         if not (x2+5*y2 in self.tablero[x1+5*y1]) or (self.marcado[x2+5*y2]!=-1):
             return [False, "Por favor ingrese movimiento valido"]
         self.marcado[x1+5*y1] = -1
@@ -90,7 +93,16 @@ while s!="1" and s!="2":
     s = input()
 if s=="1":
     s = askopenfilename()
+    while s=="":
+        s = askopenfilename()
     gm = Game(s)
 else:
-    gm = Game(None)
+    names = []
+    names.append(tk.askstring("Coyote","Ingrese el nombre del jugador que será el Coyote"))
+    names.append(tk.askstring("Gallinas","Ingrese el nombre del jugador que será las Gallinas"))
+    gm = Game(None, names)
+
+while(not gm.win()[0]):
+    pass
+
 
