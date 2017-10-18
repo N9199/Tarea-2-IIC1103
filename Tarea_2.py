@@ -22,6 +22,8 @@ class Game(tk.Frame):
             self.players.append(simpledialog.askstring("Coyote","Ingrese el nombre del jugador que será el Coyote"))
         messagebox.showinfo("Info","Cada movimiento consiste en seleccionar una ficha y despues seleccionar una posición a la cual mover la ficha. Comienzan las gallinas")
         self.update()
+        print(self.tablero[14][22], 14, 22)
+        print(self.tablero[22][14], 22, 14)
 
     def savestatus(self, m1, m2):
         t = {}
@@ -29,6 +31,7 @@ class Game(tk.Frame):
         t[1]="C"
         self.history.append(t[self.turno%2]+","+str(m1%5)+","+str(int(math.floor(m1/5)))+","+str(m2%5)+","+str(int(math.floor(m2/5))))
         print(self.history[-1])
+        print(self)
 
     def __str__(self):
         t = {}
@@ -87,7 +90,9 @@ class Game(tk.Frame):
         self.marcado = 25*[-1]
         self.turno = 0
         self.temp = -1
+        self.temp0 = True
         for i in range(25):
+            print(i)
             r = True
             l = True
             u = True
@@ -95,46 +100,58 @@ class Game(tk.Frame):
             if i%5!=4:
                 self.tablero[i][i+1]=1
                 self.tablero[i+1][i]=1
+                #print(self.tablero[i+1][i])
                 r = False
             if i%5!=0:
                 self.tablero[i][i-1]=1
                 self.tablero[i-1][i]=1
+                #print(self.tablero[i-1][i])
                 l = False
                 if i>1 and self.tablero[i][i-1]==1:
                     self.tablero[i][i-2]=2
                     self.tablero[i-2][i]=2
+                    #print(self.tablero[i-2][i])
             if math.floor(i/5)!=4:
                 self.tablero[i][i+5]=1
                 self.tablero[i+1][i]=1
+                #print(self.tablero[i+1][i])
                 d = False
             if math.floor(i/5)!=0:
                 self.tablero[i][i-5]=1
                 self.tablero[i-5][i]=1
+                #print(self.tablero[i-5][i])
                 u = False
                 if i>9 and self.tablero[i][i-5]==1:
                     self.tablero[i][i-10]=2
                     self.tablero[i-10][i]=2
+                    #print(self.tablero[i-10][i])
             if i%2==0:
                 if not (r or u):
                     self.tablero[i][i-4]=1
                     self.tablero[i-4][i]=1
+                    #print(self.tablero[i-4][i])
+                    if i>9 and self.tablero[i][i-4]==1:
+                        print(i,i-8)
+                        self.tablero[i][i-8]=2
+                        self.tablero[i-8][i]=2
+                        #print(self.tablero[i-8][i])
                 if not (r or d):
                     self.tablero[i][i+6]=1
                     self.tablero[i+6][i]=1
-                    if i>9 and self.tablero[i][i-4]==1:
-                        #print(i,i-8)
-                        self.tablero[i][i-8]==2
-                        self.tablero[i-8][i]==2
+                    #print(self.tablero[i+6][i])
                 if not (l or u):
                     self.tablero[i][i-6]=1
                     self.tablero[i-6][i]=1
+                    #print(self.tablero[i-6][i])
+                    if i>9 and self.tablero[i][i-6]==1:
+                        #print(i,i-12)
+                        self.tablero[i][i-12]=2
+                        self.tablero[i-12][i]=2
+                        #print(self.tablero[i-12][i])
                 if not (l or d):
                     self.tablero[i][i+4]=1
                     self.tablero[i+4][i]=1
-                    if i>9 and self.tablero[i][i-6]==1:
-                        #print(i,i-12)
-                        self.tablero[i][i-12]==2
-                        self.tablero[i-12][i]==2
+                    #print(self.tablero[i+4][i])
 
     def move1(self, pos):
         #print(pos,self.marcado[pos],self.turno%2)
@@ -177,8 +194,8 @@ class Game(tk.Frame):
         temp = True
         for i in range(25):
             if self.turno%2==1 and self.tablero[m1][i]==2 and self.marcado[int((m1+i)/2)]==0 and self.marcado[i]==-1:
-                if i==m2:
-                    temp =True
+                if i==m2 or self.temp0:
+                    temp = True
                     break
                 else:
                     temp = False
@@ -199,12 +216,16 @@ class Game(tk.Frame):
                 if self.tablero[m2][i]==2 and self.marcado[int((m1+m2)/2)]==0 and self.marcado[i]==-1:
                     print(self.tablero[m2][i],self.marcado[int((m1+m2)/2)],self.marcado[i])
                     self.savestatus(m1,m2)
+                    self.temp0 = False
                     return [True, True]
         self.savestatus(m1,m2)
         self.turno = self.turno + 1
+        self.temp0 = True 
         return [True, False]
 
     def win(self):
+        if self.temp0:
+            return [False]
         if self.marcado.count(0)<11:
             return [True, 1]
         a = self.marcado.index(1)
