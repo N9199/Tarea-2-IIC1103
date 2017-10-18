@@ -172,8 +172,18 @@ class Game(tk.Frame):
 
     def move2(self, m1, m2):
         if not (self.tablero[m1][m2]==1 or (self.tablero[m1][m2]==2 and self.marcado[int((m1+m2)/2)]==0)) or (self.marcado[m2]!=-1):
-            #print(self.tablero[m1][m2],self.marcado[int((m1+m2)/2)],self.marcado[m2])
+            print(self.tablero[m1][m2],self.marcado[int((m1+m2)/2)],self.marcado[m2])
             return [False, "Por favor ingrese movimiento valido"]
+        temp = True
+        for i in range(25):
+            if self.turno%2==1 and self.tablero[m1][i]==2 and self.marcado[int((m1+i)/2)]==0 and self.marcado[i]==-1:
+                if i==m2:
+                    temp =True
+                    break
+                else:
+                    temp = False
+        if not temp:
+            return [False, "El coyote tiene que comer si es que puede"]
         t = {}
         t[-1]="N"
         t[0]="G"
@@ -187,7 +197,7 @@ class Game(tk.Frame):
             self.buttons[int((m1+m2)/2)].config(text="N")
             for i in range(25):
                 if self.tablero[m2][i]==2 and self.marcado[int((m1+m2)/2)]==0 and self.marcado[i]==-1:
-                    #print(self.tablero[m2][i],self.marcado[int((m1+m2)/2)],self.marcado[i])
+                    print(self.tablero[m2][i],self.marcado[int((m1+m2)/2)],self.marcado[i])
                     self.savestatus(m1,m2)
                     return [True, True]
         self.savestatus(m1,m2)
