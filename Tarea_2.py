@@ -47,11 +47,13 @@ class Game(tk.Frame):
                 d = ""
                 for j in range(5):
                     d+="|"
-                    if j%2==i%2:
-                        d+="\\"
-                    else:
-                        d+="/"
+                    if j!=4:
+                        if j%2==i%2:
+                            d+="\\"
+                        else:
+                            d+="/"
                 s+=d+"\n"
+        return s
 
     def new(self):
         for i in range(25):
@@ -76,6 +78,7 @@ class Game(tk.Frame):
     def start(self):
         self.players = []
         self.tablero = []
+        self.history = []
         for i in range(25):
             temp = []
             for j in range(25):
@@ -201,19 +204,25 @@ class Game(tk.Frame):
         return [True, 0]
 
     def load(self):
+        self.new()
         file = askopenfilename()
         while file=="":
             file = askopenfilename()
         with open(file, 'r') as f:
             data = f.readlines()
-        self.players=data[0][:-2].split(",")
+        self.players=data[0][:-1].split(",")
+        print(self)
         for i in range(1,len(data)):
-            self.history.append(data[i][:-2])
-            
+            a = data[i][:-1].split(",")
+            self.move2(int(a[1])+5*int(a[2]),int(a[3])+5*int(a[4]))
+            print(self)
     
     def save(self):
         s = simpledialog.askstring("Info","Ingrese nombre para el archivo:")
-        if s[-4]!=".txt":
+        if len(s)>4:
+            if s[-4]!=".txt":
+                s+=".txt"
+        else:
             s+=".txt"
         with open(s, 'w') as f:
             f.write(self.players[0]+","+self.players[1]+"\n")
