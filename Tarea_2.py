@@ -177,7 +177,7 @@ class Game(tk.Frame):
             b = self.win()
             #print(b)
             if b[0]:
-                self.buttons[pos].config(background='SystemButtonFace')
+                self.buttons[self.temp].config(background='SystemButtonFace')
                 messagebox.showinfo("Felicitaciones", self.players[b[1]]+" has ganado")
                 if messagebox.askyesno("Info","Quieren guardar el juego?"):
                     self.save()
@@ -189,9 +189,9 @@ class Game(tk.Frame):
                     return
             if a[0] and a[1]:
                 self.temp = pos
-                self.buttons[pos].config(background='SystemButtonFace')
+                self.buttons[self.temp].config(background='SystemButtonFace')
             elif a[0]:
-                self.buttons[pos].config(background='SystemButtonFace')
+                self.buttons[self.temp].config(background='SystemButtonFace')
                 messagebox.showinfo("Info","Es tu turno "+self.players[self.turno%2])
                 self.update()
                 self.temp = -1
