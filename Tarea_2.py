@@ -27,7 +27,7 @@ class Game(tk.Frame):
         for i in range(25):
             for j in range(25):
                 if self.tablero[i][j]!=self.tablero[j][i]:
-                    print(i,j)
+                    print(i,j,self.tablero[i][j],self.tablero[j][i])
 
     def savestatus(self, m1, m2):
         t = {}
@@ -104,28 +104,32 @@ class Game(tk.Frame):
             if i%5!=4:
                 self.tablero[i][i+1]=1
                 self.tablero[i+1][i]=1
-                print(self.tablero[i+1][i],i,i+1)
+                #print(self.tablero[i+1][i],i,i+1)
+                #if i==20 or i==19:
+                    #print("WTF?")
                 r = False
             if i%5!=0:
                 self.tablero[i][i-1]=1
                 self.tablero[i-1][i]=1
-                print(self.tablero[i-1][i],i,i-1)
+                #print(self.tablero[i-1][i],i,i-1)
+                #if i==21 or i==20:
+                    #print("WTF?")
                 l = False
-                if i>1 and self.tablero[i][i-1]==1:
+                if i>1 and self.tablero[i][i-1]==1 and i%5>1:
                     self.tablero[i][i-2]=2
                     self.tablero[i-2][i]=2
-                    #print(self.tablero[i-2][i])
+                    #print(self.tablero[i][i-1],self.tablero[i-2][i],i,i-2)
             if math.floor(i/5)!=4:
                 self.tablero[i][i+5]=1
-                self.tablero[i+1][i]=1
-                #print(self.tablero[i+1][i])
+                self.tablero[i+5][i]=1
+                #print(self.tablero[i+5][i])
                 d = False
             if math.floor(i/5)!=0:
                 self.tablero[i][i-5]=1
                 self.tablero[i-5][i]=1
                 #print(self.tablero[i-5][i])
                 u = False
-                if i>9 and self.tablero[i][i-5]==1:
+                if i>9 and self.tablero[i][i-5]==1 and math.floor(i/5)>1:
                     self.tablero[i][i-10]=2
                     self.tablero[i-10][i]=2
                     #print(self.tablero[i-10][i])
@@ -135,7 +139,7 @@ class Game(tk.Frame):
                     self.tablero[i-4][i]=1
                     #print(self.tablero[i-4][i])
                     if i>9 and self.tablero[i][i-4]==1:
-                        print(i,i-8)
+                        #print(i,i-8)
                         self.tablero[i][i-8]=2
                         self.tablero[i-8][i]=2
                         #print(self.tablero[i-8][i])
