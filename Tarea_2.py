@@ -22,6 +22,12 @@ class Game(tk.Frame):
             self.players.append(simpledialog.askstring("Coyote","Ingrese el nombre del jugador que será el Coyote"))
         messagebox.showinfo("Info","Cada movimiento consiste en seleccionar una ficha y despues seleccionar una posición a la cual mover la ficha. Comienzan las gallinas")
         self.update()
+        for i in range(25):
+            print(self.tablero[i])
+        for i in range(25):
+            for j in range(25):
+                if self.tablero[i][j]!=self.tablero[j][i]:
+                    print(i,j)
 
     def savestatus(self, m1, m2):
         t = {}
@@ -90,7 +96,7 @@ class Game(tk.Frame):
         self.temp = -1
         self.temp0 = True
         for i in range(25):
-            print(i)
+            #print(i)
             r = True
             l = True
             u = True
@@ -98,12 +104,12 @@ class Game(tk.Frame):
             if i%5!=4:
                 self.tablero[i][i+1]=1
                 self.tablero[i+1][i]=1
-                #print(self.tablero[i+1][i])
+                print(self.tablero[i+1][i],i,i+1)
                 r = False
             if i%5!=0:
                 self.tablero[i][i-1]=1
                 self.tablero[i-1][i]=1
-                #print(self.tablero[i-1][i])
+                print(self.tablero[i-1][i],i,i-1)
                 l = False
                 if i>1 and self.tablero[i][i-1]==1:
                     self.tablero[i][i-2]=2
@@ -161,10 +167,11 @@ class Game(tk.Frame):
             self.buttons[pos].config(background='blue')
         elif pos == self.temp:
             self.temp=-1
-            self.buttons[pos].config(background='white')
+            self.buttons[pos].config(background='SystemButtonFace')
         else:
             a = self.move2(self.temp, pos)
             b = self.win()
+            print(b)
             if b[0]:
                 messagebox.showinfo("Felicitaciones", self.players[b[1]]+" has ganado")
                 if messagebox.askyesno("Info","Quieren guardar el juego?"):
@@ -187,7 +194,7 @@ class Game(tk.Frame):
 
     def move2(self, m1, m2):
         if not (self.tablero[m1][m2]==1 or (self.tablero[m1][m2]==2 and self.marcado[int((m1+m2)/2)]==0)) or (self.marcado[m2]!=-1):
-            print(self.tablero[m1][m2],self.marcado[int((m1+m2)/2)],self.marcado[m2])
+            #print(self.tablero[m1][m2],self.marcado[int((m1+m2)/2)],self.marcado[m2])
             return [False, "Por favor ingrese movimiento valido"]
         temp = True
         for i in range(25):
@@ -211,8 +218,7 @@ class Game(tk.Frame):
             self.marcado[int((m1+m2)/2)]=-1
             self.buttons[int((m1+m2)/2)].config(text="N")
             for i in range(25):
-                if self.tablero[m2][i]==2 and self.marcado[int((m1+m2)/2)]==0 and self.marcado[i]==-1:
-                    print(self.tablero[m2][i],self.marcado[int((m1+m2)/2)],self.marcado[i])
+                if self.tablero[m2][i]==2 and self.marcado[int((m2+i)/2)]==0 and self.marcado[i]==-1:
                     self.savestatus(m1,m2)
                     self.temp0 = False
                     return [True, True]
@@ -222,14 +228,15 @@ class Game(tk.Frame):
         return [True, False]
 
     def win(self):
-        if self.temp0:
-            return [False]
         if self.marcado.count(0)<11:
             return [True, 1]
+        if not self.temp0:
+            return [False, "temp0"]
         a = self.marcado.index(1)
+        print(len(self.tablero[a]))
         for i in range(len(self.tablero[a])):
-            print(self.tablero[a][i],self.marcado[i])
-            if (self.tablero[a][i]==1 or self.tablero[a][i]==2) and self.marcado[i]==0:
+            print("win:",a,i,self.tablero[a][i],self.marcado[i])
+            if (self.tablero[a][i]==1 or self.tablero[a][i]==2) and self.marcado[i]==-1:
                 return [False]
         return [True, 0]
 
@@ -245,7 +252,6 @@ class Game(tk.Frame):
         for i in range(1,len(data)):
             a = data[i][:-1].split(",")
             self.move2(int(a[1])+5*int(a[2]),int(a[3])+5*int(a[4]))
-            print(self)
     
     def save(self):
         s = simpledialog.askstring("Info","Ingrese nombre para el archivo:")
