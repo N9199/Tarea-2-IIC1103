@@ -22,8 +22,6 @@ class Game(tk.Frame):
             self.players.append(simpledialog.askstring("Coyote","Ingrese el nombre del jugador que será el Coyote"))
         messagebox.showinfo("Info","Cada movimiento consiste en seleccionar una ficha y despues seleccionar una posición a la cual mover la ficha. Comienzan las gallinas")
         self.update()
-        print(self.tablero[14][22], 14, 22)
-        print(self.tablero[22][14], 22, 14)
 
     def savestatus(self, m1, m2):
         t = {}
@@ -230,7 +228,8 @@ class Game(tk.Frame):
             return [True, 1]
         a = self.marcado.index(1)
         for i in range(len(self.tablero[a])):
-            if (self.tablero[a][i]==1 or self.tablero[a][i]==2) and not self.marcado[i]==-1:
+            print(self.tablero[a][i],self.marcado[i])
+            if (self.tablero[a][i]==1 or self.tablero[a][i]==2) and self.marcado[i]==0:
                 return [False]
         return [True, 0]
 
