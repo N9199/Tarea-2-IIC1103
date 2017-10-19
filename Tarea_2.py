@@ -14,12 +14,8 @@ class Game(tk.Frame):
         self.pack()
         self.build_GUI()
         self.start()
-        if messagebox.askyesno("Info","¿Quieren cargar una partida?"):
-            self.load()
-        else:
-            self.new()
-            self.players.append(simpledialog.askstring("Gallinas","Ingrese el nombre del jugador que será las Gallinas"))
-            self.players.append(simpledialog.askstring("Coyote","Ingrese el nombre del jugador que será el Coyote"))
+        self.new()
+        
         messagebox.showinfo("Info","Cada movimiento consiste en seleccionar una ficha y despues seleccionar una posición a la cual mover la ficha. Comienzan las gallinas")
         self.update()
         #for i in range(25):
@@ -81,6 +77,11 @@ class Game(tk.Frame):
         for i in range(25):
             self.buttons[i].config(text=t[self.marcado[i]])
         self.history = []
+        if messagebox.askyesno("Info","¿Quieren cargar una partida?"):
+            self.load()
+        else:
+            self.players.append(simpledialog.askstring("Gallinas","Ingrese el nombre del jugador que será las Gallinas"))
+            self.players.append(simpledialog.askstring("Coyote","Ingrese el nombre del jugador que será el Coyote"))
     
     def start(self):
         self.players = []
@@ -248,7 +249,6 @@ class Game(tk.Frame):
         return [True, 0]
 
     def load(self):
-        self.new()
         file = askopenfilename()
         while file=="":
             file = askopenfilename()
