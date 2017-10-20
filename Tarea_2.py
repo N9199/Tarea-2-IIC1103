@@ -250,8 +250,8 @@ class Game(tk.Frame):
 
     def load(self):
         file = askopenfilename()
-        while file=="":
-            file = askopenfilename()
+        if file =="":
+            return
         with open(file, 'r') as f:
             data = f.readlines()
         self.players=data[0][:-1].split(",")
