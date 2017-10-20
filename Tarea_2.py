@@ -11,12 +11,13 @@ class Game(tk.Frame):
 
     def __init__(self, master=None):
         super().__init__(master)
+        messagebox.showinfo("Juego del coyote y de las gallinas","Bienvenidos, jugadores!")
         self.pack()
         self.build_GUI()
         self.start()
         self.new()
         
-        messagebox.showinfo("Info","Cada movimiento consiste en seleccionar una ficha y despues seleccionar una posición a la cual mover la ficha. Comienzan las gallinas")
+        messagebox.showinfo("Info","Cada movimiento consiste en seleccionar una ficha y despues seleccionar la posición a la cual mover la ficha. Comienzan las gallinas.")
         self.update()
         #for i in range(25):
             #print(self.tablero[i])
@@ -80,11 +81,11 @@ class Game(tk.Frame):
         if messagebox.askyesno("Info","¿Quieren cargar una partida?"):
             self.load()
         else:
-            self.players.append(simpledialog.askstring("Gallinas","Ingrese el nombre del jugador que será las Gallinas"))
-            self.players.append(simpledialog.askstring("Coyote","Ingrese el nombre del jugador que será el Coyote"))
+            self.players[0]=simpledialog.askstring("Gallinas","Ingrese el nombre del jugador que será las Gallinas.")
+            self.players[1]=simpledialog.askstring("Coyote","Ingrese el nombre del jugador que será el Coyote.")
     
     def start(self):
-        self.players = []
+        self.players = ["",""]
         self.tablero = []
         self.history = []
         for i in range(25):
@@ -166,7 +167,7 @@ class Game(tk.Frame):
         #print(pos,self.marcado[pos],self.turno%2)
         if self.temp==-1:
             if self.marcado[pos]!=self.turno%2:
-                messagebox.showinfo("Error","Por favor seleccionar ficha valida")
+                messagebox.showinfo("Error","Por favor seleccionar ficha valida.")
                 return
             self.temp = pos
             self.buttons[pos].config(background='blue')
@@ -179,7 +180,7 @@ class Game(tk.Frame):
             #print(b)
             if b[0]:
                 self.buttons[self.temp].config(background='SystemButtonFace')
-                messagebox.showinfo("Felicitaciones", self.players[b[1]]+" has ganado")
+                messagebox.showinfo("Felicitaciones", self.players[b[1]]+" has ganado.")
                 if messagebox.askyesno("Info","Quieren guardar el juego?"):
                     self.save()
                 if messagebox.askyesno("Info","Quieren jugar un juego nuevo?"):
@@ -193,7 +194,7 @@ class Game(tk.Frame):
                 self.buttons[self.temp].config(background='SystemButtonFace')
             elif a[0]:
                 self.buttons[self.temp].config(background='SystemButtonFace')
-                messagebox.showinfo("Info","Es tu turno "+self.players[self.turno%2])
+                messagebox.showinfo("Info","Es tu turno "+self.players[self.turno%2]+" ¿Cual sera tu movimiento? Si quieres cargar o guardar, apreta los botones corespondientes.")
                 self.update()
                 self.temp = -1
             else:
@@ -203,7 +204,7 @@ class Game(tk.Frame):
     def move2(self, m1, m2):
         if not (self.tablero[m1][m2]==1 or (self.tablero[m1][m2]==2 and self.marcado[int((m1+m2)/2)]==0)) or (self.marcado[m2]!=-1):
             #print(self.tablero[m1][m2],self.marcado[int((m1+m2)/2)],self.marcado[m2])
-            return [False, "Por favor ingrese movimiento valido"]
+            return [False, "Por favor ingrese movimiento valido."]
         temp = True
         for i in range(25):
             if self.turno%2==1 and self.tablero[m1][i]==2 and self.marcado[int((m1+i)/2)]==0 and self.marcado[i]==-1:
@@ -213,7 +214,7 @@ class Game(tk.Frame):
                 else:
                     temp = False
         if not temp:
-            return [False, "El coyote tiene que comer si es que puede"]
+            return [False, "El coyote tiene que comer si es que puede."]
         t = {}
         t[-1]="N"
         t[0]="G"
@@ -236,10 +237,10 @@ class Game(tk.Frame):
         return [True, False]
 
     def win(self):
-        if self.marcado.count(0)<11:
-            return [True, 1]
         if not self.temp0:
             return [False, "temp0"]
+        if self.marcado.count(0)<11:
+            return [True, 1]
         a = self.marcado.index(1)
         #print(len(self.tablero[a]))
         for i in range(len(self.tablero[a])):
